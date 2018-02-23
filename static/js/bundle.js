@@ -3562,20 +3562,24 @@ const Marionette = __webpack_require__(5); // import Marionette
 // var hello = new HelloWorld();                   // instantiate new instance of view
 //
 // hello.render();                                 // render the new instance of view
-
-const TodoList =  Marionette.LayoutView.extend({
-  el: '#app-hook',
+const ToDo = Marionette.LayoutView.extend({
+  tagName: 'li',
   template: __webpack_require__(8)
 });
 
+const TodoList =  Marionette.CollectionView.extend({
+  el: '#app-hook',
+  tagName: 'ul',
+
+  childView: ToDo
+});
+
 const todo = new TodoList({
-  model: new Backbone.Model({ // wrapping todo object in backbone model 
-    items: [
+  collection: new Backbone.Collection([
       {assignee: 'Guy', text: 'Learn backbone'},
       {assignee: 'Guy', text: 'Learn marionette'},
       {assignee: 'Me', text: 'Have fun!'},
-    ]
-  })
+  ])
 });
 
 todo.render();
@@ -18144,15 +18148,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Backbone.Baby
 /* WEBPACK VAR INJECTION */(function(_) {module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<ul>\n  ';
- _.each(items, function(item) { 
-__p+='\n    <li>'+
-((__t=( item.text ))==null?'':_.escape(__t))+
+__p+=''+
+((__t=( text ))==null?'':_.escape(__t))+
 ' &mdash; '+
-((__t=( item.assignee ))==null?'':_.escape(__t))+
-'</li>\n  ';
- }) 
-__p+='\n</ul>\n';
+((__t=( assignee ))==null?'':_.escape(__t))+
+'\n';
 }
 return __p;
 };

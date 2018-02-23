@@ -10,20 +10,24 @@ const Marionette = require('backbone.marionette'); // import Marionette
 // var hello = new HelloWorld();                   // instantiate new instance of view
 //
 // hello.render();                                 // render the new instance of view
+const ToDo = Marionette.LayoutView.extend({
+  tagName: 'li',
+  template: require('./templates/todoitem.html')
+});
 
-const TodoList =  Marionette.LayoutView.extend({
+const TodoList =  Marionette.CollectionView.extend({
   el: '#app-hook',
-  template: require('./templates/layout.html')
+  tagName: 'ul',
+
+  childView: ToDo
 });
 
 const todo = new TodoList({
-  model: new Backbone.Model({ // wrapping todo object in backbone model 
-    items: [
+  collection: new Backbone.Collection([
       {assignee: 'Guy', text: 'Learn backbone'},
       {assignee: 'Guy', text: 'Learn marionette'},
       {assignee: 'Me', text: 'Have fun!'},
-    ]
-  })
+  ])
 });
 
 todo.render();
