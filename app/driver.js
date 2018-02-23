@@ -10,7 +10,7 @@ const initialData = [
 
 const app = new Marionette.Application({
   onStart: function(options) {
-    const todo = new TodoView({
+    let todo = new TodoView({
       collection: new Backbone.Collection(options.initialData),
       model: new ToDoModel()
     });
