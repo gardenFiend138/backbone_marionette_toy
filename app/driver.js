@@ -1,6 +1,7 @@
 const Backbone = require('backbone');
 const Marionette = require('backbone.marionette'); // import Marionette
 
+const ToDoModel = require('./models/todo');
 
 // var HelloWorld = Marionette.LayoutView.extend({ // create new view
 //   el: '#app-hook',                              // jQuery selector
@@ -60,15 +61,25 @@ const TodoList =  Marionette.CompositeView.extend({
   // we can also reference the UI values in this view and treat it like a
   // jQuery selector object
   onAddTodoItem: function() {
-    this.collection.add({
+    this.model.set({
       assignee: this.ui.assignee.val(),
       text: this.ui.text.val(),
     });
+
+    if (this.model.isValid()) {
+      let items = this.model.pick('assignee', 'text');
+      this.collection.add(items);
+    }
   },
 
   // this is the method referenced above in `collectionEvents`
   // is called when the event is triggered
   itemAdded: function() {
+    this.model.set({
+      assignee: '',
+      text: '',
+    });
+
     this.ui.assignee.val('');
     this.ui.text.val('');
   }
@@ -79,7 +90,8 @@ const todo = new TodoList({
       {assignee: 'Guy', text: 'Learn backbone'},
       {assignee: 'Guy', text: 'Learn marionette'},
       {assignee: 'Me', text: 'Have fun!'},
-  ])
+  ]),
+  model: new ToDoModel(),
 });
 
 todo.render();

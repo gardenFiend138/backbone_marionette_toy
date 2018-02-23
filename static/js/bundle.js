@@ -3553,6 +3553,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscor
 const Backbone = __webpack_require__(1);
 const Marionette = __webpack_require__(5); // import Marionette
 
+const ToDoModel = __webpack_require__(8);
 
 // var HelloWorld = Marionette.LayoutView.extend({ // create new view
 //   el: '#app-hook',                              // jQuery selector
@@ -3564,7 +3565,7 @@ const Marionette = __webpack_require__(5); // import Marionette
 // hello.render();                                 // render the new instance of view
 const ToDo = Marionette.LayoutView.extend({
   tagName: 'li',
-  template: __webpack_require__(8)
+  template: __webpack_require__(9)
 });
 
 // CollectionView loops through all models in specified collection, rendering
@@ -3584,33 +3585,53 @@ const ToDo = Marionette.LayoutView.extend({
 // a wrapper template
 const TodoList =  Marionette.CompositeView.extend({
   el: '#app-hook',
-  template: __webpack_require__(9),
+  template: __webpack_require__(10),
 
   childView: ToDo,
   childViewContainer: 'ul',
 
+  // add UI hash to view; attach to any view to create cached jQuery
+  // selectors to elements in view's template
   ui: {
     assignee: '#id_assignee',
     form: 'form',
     text: '#id_text'
   },
 
+  // references keys in UI hash; listen to jQuery events, fire trigger
   triggers: {
     'submit @ui.form': 'add:todo:item'
   },
 
+  // listens to changes occurring on attached `this.collection` attribute;
+  // value must exist as a method on this view
   collectionEvents: {
     add: 'itemAdded'
   },
 
+  // trigger converted to an `onEventName` method and called
+  // we can also reference the UI values in this view and treat it like a
+  // jQuery selector object
   onAddTodoItem: function() {
-    this.collection.add({
+    this.model.set({
       assignee: this.ui.assignee.val(),
       text: this.ui.text.val(),
     });
+
+    if (this.model.isValid()) {
+      let items = this.model.pick('assignee', 'text');
+      this.collection.add(items);
+    }
   },
 
+  // this is the method referenced above in `collectionEvents`
+  // is called when the event is triggered
   itemAdded: function() {
+    this.model.set({
+      assignee: '',
+      text: '',
+    });
+
     this.ui.assignee.val('');
     this.ui.text.val('');
   }
@@ -3621,7 +3642,8 @@ const todo = new TodoList({
       {assignee: 'Guy', text: 'Learn backbone'},
       {assignee: 'Guy', text: 'Learn marionette'},
       {assignee: 'Me', text: 'Have fun!'},
-  ])
+  ]),
+  model: new ToDoModel(),
 });
 
 todo.render();
@@ -18187,6 +18209,43 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Backbone.Baby
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(_) {const Backbone = __webpack_require__(1);
+
+const ToDo = Backbone.Model.extend({
+  defaults: {
+    assignee: '',
+    text: ''
+  },
+
+  validate: function(attrs) {
+    let errors = {};
+    let hasError = false;
+
+    if (!attrs.assignee) {
+      errors.assignee = 'assignee must be set';
+      hasErrors = true;
+    }
+
+    if (!attrs.text) {
+      errors.text = 'You want to do nothing?! Come on, gimme some text :]';
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      _.each(errors, alert);
+      return errors;
+    }
+  }
+});
+
+module.exports = ToDo;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /* WEBPACK VAR INJECTION */(function(_) {module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -18202,7 +18261,7 @@ return __p;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = function(obj){
