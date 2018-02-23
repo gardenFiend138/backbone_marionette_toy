@@ -32,32 +32,42 @@ const ToDo = Marionette.LayoutView.extend({
 // a wrapper template
 const TodoList =  Marionette.CompositeView.extend({
   el: '#app-hook',
-  template: require('./templates/todoitem.html'),
+  template: require('./templates/todolist.html'),
 
   childView: ToDo,
   childViewContainer: 'ul',
 
+  // add UI hash to view; attach to any view to create cached jQuery
+  // selectors to elements in view's template
   ui: {
     assignee: '#id_assignee',
     form: 'form',
     text: '#id_text'
   },
 
+  // references keys in UI hash; listen to jQuery events, fire trigger
   triggers: {
     'submit @ui.form': 'add:todo:item'
   },
 
+  // listens to changes occurring on attached `this.collection` attribute;
+  // value must exist as a method on this view
   collectionEvents: {
     add: 'itemAdded'
   },
 
+  // trigger converted to an `onEventName` method and called
+  // we can also reference the UI values in this view and treat it like a
+  // jQuery selector object
   onAddTodoItem: function() {
     this.collection.add({
-      asignee: this.ui.assignee.val(),
+      assignee: this.ui.assignee.val(),
       text: this.ui.text.val(),
     });
   },
 
+  // this is the method referenced above in `collectionEvents`
+  // is called when the event is triggered
   itemAdded: function() {
     this.ui.assignee.val('');
     this.ui.text.val('');
