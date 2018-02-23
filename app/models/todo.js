@@ -6,9 +6,9 @@ const ToDo = Backbone.Model.extend({
     text: ''
   },
 
-  validate: function(attrs) {
+  validate: attrs => {
     let errors = {};
-    let hasError = false;
+    let hasErrors = false;
 
     if (!attrs.text) {
       errors.text = 'You want to do nothing?! Come on, gimme some text :]';
