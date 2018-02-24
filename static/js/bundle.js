@@ -7069,19 +7069,18 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// MarionetteJS 
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Marionette = __webpack_require__(1);
-const TodoView = __webpack_require__(8);
-const ToDoModel = __webpack_require__(14);
+"use strict";
 
-const initialData = [
-  {assignee: 'Guy', text: 'Learn backbone'},
-  {assignee: 'Guy', text: 'Learn marionette'},
-  {assignee: 'Me', text: 'Have fun!'},
-];
 
-const app = new Marionette.Application({
-  onStart: function(options) {
-    let todo = new TodoView({
+var Marionette = __webpack_require__(1);
+var TodoView = __webpack_require__(8);
+var ToDoModel = __webpack_require__(14);
+
+var initialData = [{ assignee: 'Guy', text: 'Learn backbone' }, { assignee: 'Guy', text: 'Learn marionette' }, { assignee: 'Me', text: 'Have fun!' }];
+
+var app = new Marionette.Application({
+  onStart: function onStart(options) {
+    var todo = new TodoView({
       collection: new Backbone.Collection(options.initialData),
       model: new ToDoModel()
     });
@@ -7090,8 +7089,7 @@ const app = new Marionette.Application({
   }
 });
 
-app.start({initialData})
-
+app.start({ initialData: initialData });
 
 /***/ }),
 /* 4 */
@@ -18134,12 +18132,15 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Backbone.Baby
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Marionette = __webpack_require__(1);
+"use strict";
 
-const FormView = __webpack_require__(9);
-const ListView = __webpack_require__(11);
 
-const Layout = Marionette.LayoutView.extend({
+var Marionette = __webpack_require__(1);
+
+var FormView = __webpack_require__(9);
+var ListView = __webpack_require__(11);
+
+var Layout = Marionette.LayoutView.extend({
   el: '#app-hook',
 
   template: __webpack_require__(13),
@@ -18150,28 +18151,28 @@ const Layout = Marionette.LayoutView.extend({
   },
 
   collectionEvents: {
-    add: 'itemAdded',
+    add: 'itemAdded'
   },
 
-  onShow: function() {
-    const formView = new FormView({model: this.model});
-    const listView = new ListView({collection: this.collection});
+  onShow: function onShow() {
+    var formView = new FormView({ model: this.model });
+    var listView = new ListView({ collection: this.collection });
 
     this.showChildView('form', formView);
     this.showChildView('list', listView);
   },
 
-  onChildviewAddTodoItem: function(child) {
+  onChildviewAddTodoItem: function onChildviewAddTodoItem(child) {
     this.model.set({
       assignee: child.ui.assignee.val(),
       text: child.ui.text.val()
-    }, {validate: true});
+    }, { validate: true });
 
-    const items = this.model.pick('assignee', 'text');
+    var items = this.model.pick('assignee', 'text');
     this.collection.add(items);
   },
 
-  itemAdded: function() {
+  itemAdded: function itemAdded() {
     this.model.set({
       assignee: '',
       text: ''
@@ -18180,7 +18181,6 @@ const Layout = Marionette.LayoutView.extend({
 });
 
 module.exports = Layout;
-
 
 // This was all used before breaking the form and list views into their own files;
 // now, this layout file is purely for managing the views
@@ -18272,14 +18272,16 @@ module.exports = Layout;
 //
 // module.exports = TodoList;
 
-
 /***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Marionette = __webpack_require__(1);
+"use strict";
 
-const FormView = Marionette.LayoutView.extend({
+
+var Marionette = __webpack_require__(1);
+
+var FormView = Marionette.LayoutView.extend({
   tagName: 'form',
   template: __webpack_require__(10),
 
@@ -18298,7 +18300,6 @@ const FormView = Marionette.LayoutView.extend({
 });
 
 module.exports = FormView;
-
 
 /***/ }),
 /* 10 */
@@ -18322,20 +18323,22 @@ return __p;
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Marionette = __webpack_require__(1);
+"use strict";
 
-const ToDo = Marionette.LayoutView.extend({
+
+var Marionette = __webpack_require__(1);
+
+var ToDo = Marionette.LayoutView.extend({
   tagName: 'li',
   template: __webpack_require__(12)
 });
 
-const TodoList = Marionette.CollectionView.extend({
+var TodoList = Marionette.CollectionView.extend({
   tagName: 'ul',
   childView: ToDo
 });
 
 module.exports = TodoList;
-
 
 /***/ }),
 /* 12 */
@@ -18372,17 +18375,20 @@ return __p;
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(_) {const Backbone = __webpack_require__(2);
+"use strict";
+/* WEBPACK VAR INJECTION */(function(_) {
 
-const ToDo = Backbone.Model.extend({
+var Backbone = __webpack_require__(2);
+
+var ToDo = Backbone.Model.extend({
   defaults: {
     assignee: '',
     text: ''
   },
 
-  validate: attrs => {
-    let errors = {};
-    let hasErrors = false;
+  validate: function validate(attrs) {
+    var errors = {};
+    var hasErrors = false;
 
     if (!attrs.text) {
       errors.text = 'You want to do nothing?! Come on, gimme some text :]';
@@ -18402,7 +18408,6 @@ const ToDo = Backbone.Model.extend({
 });
 
 module.exports = ToDo;
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })

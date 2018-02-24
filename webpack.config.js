@@ -8,6 +8,14 @@ module.exports = {
         test: /\.html$/,
         loader: 'underscore-template-loader'
       },
+      {
+        test: /\.(es6|js)$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015']
+        }
+      },
     ]
   },
   output: {
